@@ -3,7 +3,7 @@ from Route import ZumoExtension
 
 zumo = ZumoExtension.ZumoExtension()
 
-res= zumo.superGOGO([0,0, 0,1, 60,40 ,1,0 , 80 ,100,1,0],[])
+res= zumo.gogoBezier([0,0, 0,1, 60,40 ,1,0 , 120 ,120,0,1])
 print("gogo")
 s = socket.socket()
 port = 8090
@@ -29,7 +29,6 @@ while len(res) != 0 :
     print("")
     send = conn.send(speedData.encode("ascii"))
     res = res[32:]
-
 
 speedData = ""
 for i in range(0,256) :

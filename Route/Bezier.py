@@ -36,9 +36,9 @@ def bezier_curve_range(n, points):
 
 def findRoute(start_pos, start_rot, goal_pos, goal_rot):
     interP = intersection(start_pos, start_rot, goal_pos, goal_rot)
-    round = (goal_pos - start_pos).x * (goal_pos - start_pos).x + (goal_pos - start_pos).y * (
-                goal_pos - start_pos).y
+    round = (goal_pos - start_pos).x + (goal_pos - start_pos).y
     round = int(round / 4 * PI) + 1
+    print(round)
     ctrlPoints = [start_pos, (start_pos + interP) * 0.5, (interP + goal_pos) * 0.5, goal_pos]
     routePoint = []
     for point in bezier_curve_range(round, ctrlPoints):

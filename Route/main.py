@@ -30,8 +30,7 @@ for a in zumo.route :
 for a in res :
     x.append(a[0].x)
     y.append(a[0].y)
-    #print(a[3]+a[4])
-    print(a[2])
+    print(a[3])
 
 plt.figure(figsize=(10,10)) #创建绘图对象
 plt.plot(x,y,"b--",linewidth=1)   #在当前绘图对象绘图（X轴，Y轴，蓝色虚线，线宽度）

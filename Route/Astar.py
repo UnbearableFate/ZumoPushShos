@@ -98,6 +98,13 @@ class state :
                         print("nonono")
                 leftSpeed = makeN(leftSpeed)
                 rightSpeed = makeN(rightSpeed)
+                '''
+                if p.parent != 0 :
+                    time = int((p.position - p.parent.position).magnitude() / SPEED * 1000)
+                else:
+                    time = 50
+                time = makeFour(time)
+                '''
                 res.insert(0, [p.position,p.rotation,p.rotateArc,leftSpeed,rightSpeed])
                 p = p.parent
             else:
