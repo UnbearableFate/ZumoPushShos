@@ -72,20 +72,19 @@ if __name__ == '__main__':
             goalY = (blue_pos_1[1] + blue_pos_2[1]) / 2
             goalRotX = blue_pos_2[0] - blue_pos_1[0]
             goalRotY = blue_pos_2[1] - blue_pos_1[1]
-            zumo.gogoSimple([startX,startY,starRotX,starRotY,goalX,goalY,goalRotX,goalRotY,100,100,0,1])
+            res = zumo.gogoBezier([startX,startY,starRotX,starRotY,goalX,goalY,goalRotX,goalRotY,100,100,0,1])
             print("#1")
             print("gogogogogogo")
-            res = zumo.action
 
             while len(res) != 0:
-                pp = res[:21]
+                pp = res[:32]
                 speedData = ""
                 for a in pp:
-                    speedData += a[0]+a[1]+a[2]
+                    speedData += a[0]+a[1]
                     print(speedData)
                     print("")
                     send = conn.send(speedData.encode("ascii"))
-                res = res[21:]
+                res = res[32:]
 
             speedData = ""
             for i in range(0, 256):
