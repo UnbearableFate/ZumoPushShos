@@ -36,8 +36,10 @@ if __name__ == '__main__':
     # カメラを選ぶ
     cap = cv2.VideoCapture(0)
     print("#11")
+
     while (1):
         # カメラから画像データを読み込む
+        print("hahaha")
         ret, camera = cap.read()
 
         # 読み込んたかどうか判断
@@ -46,58 +48,69 @@ if __name__ == '__main__':
             # 画像からベクトルを取得
             # 赤い円、青い円の順、大きい円が先
             print("#2")
+
+            ret = cap.set(3, 1280)
+            ret = cap.set(4, 720)
+
             camera, red_pos_1, red_pos_2, blue_pos_1, blue_pos_2 = circle_detection_main.circle_detection_main(camera)
             cv2.imshow('capture', camera)
-            if len(red_pos_1) == 0 :
-                continue
-            rr = math.sqrt(pow(red_pos_1[0] - red_pos_2[0],2) + pow(red_pos_1[1]-red_pos_2[1],2))
-            C = 5 / rr;
-            red_pos_1[0] = C * red_pos_1[0]
-            red_pos_1[1] = C * red_pos_1[1]
 
-            red_pos_2[1] = C * red_pos_2[1]
-            red_pos_2[1] = C * red_pos_2[1]
+            print(red_pos_1)
+            print(red_pos_2)
+            print(blue_pos_1)
+            print(blue_pos_2)
+            print("")
 
-            blue_pos_1[0] = C * blue_pos_1[0]
-            blue_pos_1[1] = C * blue_pos_1[1]
+            if len(red_pos_1) != 0 and len(red_pos_2) != 0 and len(blue_pos_1) != 0 and len(blue_pos_2) != 0:
 
-            blue_pos_2[0] = C * blue_pos_2[0]
-            blue_pos_2[1] = C * blue_pos_2[1]
-            print(red_pos_1, red_pos_2, blue_pos_1, blue_pos_2)
-            startX = (red_pos_1[0] + red_pos_2[0]) / 2
-            startY = (red_pos_1[1] + red_pos_2[1]) / 2
-            starRotX = red_pos_2[0] - red_pos_1[0]
-            starRotY = red_pos_2[1] - red_pos_1[1]
-            goalX = (blue_pos_1[0] + blue_pos_2[0]) / 2
-            goalY = (blue_pos_1[1] + blue_pos_2[1]) / 2
-            goalRotX = blue_pos_2[0] - blue_pos_1[0]
-            goalRotY = blue_pos_2[1] - blue_pos_1[1]
-            zumo.gogoSimple([startX,startY,starRotX,starRotY,goalX,goalY,goalRotX,goalRotY,100,100,0,1])
-            print("#1")
-            print("gogogogogogo")
-            res = zumo.action
+                rr = math.sqrt(pow(red_pos_1[0] - red_pos_2[0],2) + pow(red_pos_1[1]-red_pos_2[1],2))
+                C = 5 / rr;
+                red_pos_1[0] = C * red_pos_1[0]
+                red_pos_1[1] = C * red_pos_1[1]
 
-            while len(res) != 0:
-                pp = res[:21]
+                red_pos_2[1] = C * red_pos_2[1]
+                red_pos_2[1] = C * red_pos_2[1]
+
+                blue_pos_1[0] = C * blue_pos_1[0]
+                blue_pos_1[1] = C * blue_pos_1[1]
+
+                blue_pos_2[0] = C * blue_pos_2[0]
+                blue_pos_2[1] = C * blue_pos_2[1]
+                print(red_pos_1, red_pos_2, blue_pos_1, blue_pos_2)
+                startX = (red_pos_1[0] + red_pos_2[0]) / 2
+                startY = (red_pos_1[1] + red_pos_2[1]) / 2
+                starRotX = red_pos_2[0] - red_pos_1[0]
+                starRotY = red_pos_2[1] - red_pos_1[1]
+                goalX = (blue_pos_1[0] + blue_pos_2[0]) / 2
+                goalY = (blue_pos_1[1] + blue_pos_2[1]) / 2
+                goalRotX = blue_pos_2[0] - blue_pos_1[0]
+                goalRotY = blue_pos_2[1] - blue_pos_1[1]
+            
+                #res = zumo.gogoBezier([startX,startY,starRotX,starRotY,goalX,goalY,goalRotX,goalRotY,100,100,0,1])
+                res = zumo.gogoBezier([startX,startY,0,1,goalX,goalY,1,0,120,120,0,1])
+                print("#1")
+                print("gogogogogogo")
+
+                while len(res) != 0:
+                    pp = res[:32]
+                    speedData = ""
+                    for a in pp:
+                        speedData += a[3]+a[4]
+                        print(speedData)
+                        print("")
+                        send = conn.send(speedData.encode("ascii"))
+                    res = res[32:]
+
                 speedData = ""
-                for a in pp:
-                    speedData += a[0]+a[1]+a[2]
-                    print(speedData)
-                    print("")
+                for i in range(0, 256):
+                    speedData += "0"
+
+                while True:
                     send = conn.send(speedData.encode("ascii"))
-                res = res[21:]
-
-            speedData = ""
-            for i in range(0, 256):
-                speedData += "0"
-
-            while True:
-                send = conn.send(speedData.encode("ascii"))
 
         # 'q'を押したら、プログラム終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
